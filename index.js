@@ -80,7 +80,7 @@ app.post("/translate", async (req, res) => {
           {
             role: "system",
             content:
-              `act as language translate expert, your task is convert user inputed text into ${language} without adding extra information.`,
+              `act as language translate expert, your task is convert the given input into ${language} without adding extra information.`,
           },
           {
             role: "user",
