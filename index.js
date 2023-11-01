@@ -100,6 +100,35 @@ app.post("/translate", async (req, res) => {
     }
   });
 
+  app.post("/analyse", async (req, res) => {
+    let { query } = req.body;
+    try {
+      const response = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [
+          {
+            role: "system",
+            content:
+              `You are an helpful assistant that performs sentiment and emotion analysis. You can receive the text in any language. Analyze the given text for emotions and sentiments. Provide insights on positive, negative, and neutral emotions, as well as whether the text conveys sympathy or compassion if there is any.`,
+          },
+          {
+            role: "user",
+            content: query,
+          },
+        ],
+        temperature: 1,
+        max_tokens: 150,
+        top_p: 1,
+        frequency_penalty: 0,
+        presence_penalty: 0,
+      });
+      res.status(200).send(response.choices[0].message.content);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({ error: "Internal Server error" });
+    }
+  });
+
 app.listen(4000, () => {
   try {
     console.log("server is running");
